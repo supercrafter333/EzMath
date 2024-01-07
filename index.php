@@ -31,7 +31,14 @@ echo (new basicNav());
 
 
 <main role="main">
-    <!-- Page content -->
+
+    <div class="bigTop">
+        <br>
+        <h1>EzMath</h1>
+        <h3>Dein Mathe-Retter im Unterricht</h3>
+        <br>
+    </div>
+
 </main>
 
 

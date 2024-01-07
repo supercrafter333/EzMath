@@ -45,7 +45,7 @@ class basicHeader
         $basicStuff = $dir . "js/basicStuff.js";
 
         return implode(PHP_EOL, ['<meta charset="UTF-8">',
-            '<title>' . $this->subsiteName . ' × </title>',
+            '<title>' . $this->subsiteName . ' × EzMath</title>',
             '<link rel="icon" href="">',
             '<meta name="image" content="">',
             '<meta name="description" content="">',

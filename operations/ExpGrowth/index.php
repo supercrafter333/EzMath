@@ -58,7 +58,7 @@ echo (new basicNav());
     <article class="basicArticle">
         <h3>Wiederholungen <mark>n</mark> berechnen</h3>
         <br />
-        <a role="button" href="#">Zum Rechner</a>
+        <a role="button" href="ExpGrowthN.php">Zum Rechner</a>
     </article>
 
 </main>

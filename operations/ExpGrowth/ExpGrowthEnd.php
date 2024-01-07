@@ -32,7 +32,7 @@ echo (new basicNav("ExpGrowthEnd.php"));
 
         if (!isset($_POST["K0"]) || !isset($_POST["Prozent"]) || !isset($_POST["Jahre"]) || !isset($_POST["Nachkommastellen"])) {
             echo implode(PHP_EOL, [
-                '<label for="K0">Startkapital (K0):</label>',
+                '<label for="K0">Startwert (K0):</label>',
                 '<input type="number" step="any" value="0" alt="K0" name="K0" required>',
                 '',
                 '<label for="Prozent">Prozent:</label>',
@@ -57,10 +57,10 @@ echo (new basicNav("ExpGrowthEnd.php"));
             ]);
         } else {
             include "../../calcOps/ExpGrowthKn.php";
-            $k0 = $_POST["K0"];
-            $p = $_POST["Prozent"];
-            $n = $_POST["Jahre"];
-            $dp = $_POST["Nachkommastellen"];
+            $k0 = htmlspecialchars($_POST["K0"]);
+            $p = htmlspecialchars($_POST["Prozent"]);
+            $n = htmlspecialchars($_POST["Jahre"]);
+            $dp = htmlspecialchars($_POST["Nachkommastellen"]);
 
             $calc = new ExpGrowthKn($k0, $n, $p);
             $res = $calc->calc($dp);
@@ -69,7 +69,7 @@ echo (new basicNav("ExpGrowthEnd.php"));
 
 
             echo implode(PHP_EOL, [
-                '<label for="K0">Startkapital (K0):</label>',
+                '<label for="K0">Startwert (K0):</label>',
                 '<input type="number" step="any" value="' . $k0 . '" alt="K0" name="K0" required>',
                 '',
                 '<label for="Prozent">Prozent:</label>',

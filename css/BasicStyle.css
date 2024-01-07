@@ -69,7 +69,23 @@ h1 {
     padding: 40px;
 }
 
+.bigTop {
+    background: rgba(50, 50, 50, 0.5);
+    text-align: center;
+    border-bottom: 3px solid blue;
+    width: 80%;
+    min-height: 100px;
+    margin: 50px auto 20px auto;
+}
+
+.bigTop h1, h3 {
+    margin: 0;
+}
+
 @media (max-width: 900px) {
+    .bigTop {
+        width: 95%;
+    }
     .skewedTop {
         margin: 10px 0 15px;
     }

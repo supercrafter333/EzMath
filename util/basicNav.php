@@ -16,7 +16,7 @@ class basicNav
     {
         $hrefPreset = basicHeader::$dir;
 
-        $cfgContent = yaml_parse(file_get_contents(($hrefPreset === "/" ? "" : $hrefPreset) . "pub_cfg/navbar.yml"));
+        $cfgContent = json_decode(file_get_contents(($hrefPreset === "/" ? "" : $hrefPreset) . "pub_cfg/navbar.json"));
         $navContent = [];
         foreach ($cfgContent as $site => $path) {
             $navContent[] = '<li><a href="' . ($hrefPreset === "/" ? "" : $hrefPreset) . $path . '">' . $site . '</a></li>';

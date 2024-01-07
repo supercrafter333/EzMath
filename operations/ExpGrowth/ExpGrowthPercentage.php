@@ -33,10 +33,10 @@ echo (new basicNav("ExpGrowthEnd.php"));
 
         if (!isset($_POST["K0"]) || !isset($_POST["Kn"]) || !isset($_POST["Jahre"]) || !isset($_POST["Nachkommastellen"])) {
             echo implode(PHP_EOL, [
-                '<label for="K0">Startkapital (K0):</label>',
+                '<label for="K0">Startwert (K0):</label>',
                 '<input type="number" step="any" value="0" alt="K0" name="K0" required>',
                 '',
-                '<label for="Kn">Endkapital (Kn):</label>',
+                '<label for="Kn">Endwert (Kn):</label>',
                 '<input type="number" step="any" value="0" alt="Kn" name="Kn" required>',
                 '',
                 '<label for="Jahre">Wiederholungen:</label>',
@@ -58,24 +58,24 @@ echo (new basicNav("ExpGrowthEnd.php"));
             ]);
         } else {
             include "../../calcOps/ExpGrowthQP.php";
-            $k0 = $_POST["K0"];
-            $kn = $_POST["Kn"];
-            $n = $_POST["Jahre"];
-            $dp = $_POST["Nachkommastellen"];
+            $k0 = htmlspecialchars($_POST["K0"]);
+            $kn = htmlspecialchars($_POST["Kn"]);
+            $n = htmlspecialchars($_POST["Jahre"]);
+            $dp = htmlspecialchars($_POST["Nachkommastellen"]);
 
             $calc = new ExpGrowthQP($k0, $kn, $n);
             $res = $calc->calc($dp);
-            $resQ = $res["q"];
-            $resP = $res["p"];
+            $resQ = htmlspecialchars($res["q"]);
+            $resP = htmlspecialchars($res["p"]);
 
             //echo "<script>Swal.fire({title: 'Ergebnis:', text: $res, icon: 'success'})</script>";
 
 
             echo implode(PHP_EOL, [
-                '<label for="K0">Startkapital (K0):</label>',
+                '<label for="K0">Startwert (K0):</label>',
                 '<input type="number" step="any" value="' . $k0 . '" alt="K0" name="K0" required>',
                 '',
-                '<label for="Kn">Endkapital (Kn):</label>',
+                '<label for="Kn">Endwert (Kn):</label>',
                 '<input type="number" step="any" value="' . $kn . '" alt="Kn" name="Kn" required>',
                 '',
                 '<label for="Jahre">Wiederholungen:</label>',

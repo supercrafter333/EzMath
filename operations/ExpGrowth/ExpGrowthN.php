@@ -30,12 +30,12 @@ echo (new basicNav("ExpGrowthEnd.php"));
 
         <?php
 
-        if (!isset($_POST["K0"]) || !isset($_POST["Kn"]) || !isset($_POST["Jahre"]) || !isset($_POST["Nachkommastellen"])) {
+        if (!isset($_POST["K0"]) || !isset($_POST["Kn"]) || !isset($_POST["p"]) || !isset($_POST["Nachkommastellen"])) {
             echo implode(PHP_EOL, [
-                '<label for="K0">Startkapital (K0):</label>',
+                '<label for="K0">Startwert (K0):</label>',
                 '<input type="number" step="any" value="0" alt="K0" name="K0" required>',
                 '',
-                '<label for="Kn">Endkapital (Kn):</label>',
+                '<label for="Kn">Endwert (Kn):</label>',
                 '<input type="number" step="any" value="0" alt="Kn" name="Kn" required>',
                 '',
                 '<label for="p">Prozent:</label>',
@@ -57,10 +57,10 @@ echo (new basicNav("ExpGrowthEnd.php"));
             ]);
         } else {
             include "../../calcOps/ExpGrowthN.php";
-            $k0 = $_POST["K0"];
-            $kn = $_POST["Kn"];
-            $p = $_POST["p"];
-            $dp = $_POST["Nachkommastellen"];
+            $k0 = htmlspecialchars($_POST["K0"]);
+            $kn = htmlspecialchars($_POST["Kn"]);
+            $p = htmlspecialchars($_POST["p"]);
+            $dp = htmlspecialchars($_POST["Nachkommastellen"]);
 
             $calc = new ExpGrowthN($k0, $kn, $p);
             $res = $calc->calc($dp);
@@ -69,10 +69,10 @@ echo (new basicNav("ExpGrowthEnd.php"));
 
 
             echo implode(PHP_EOL, [
-                '<label for="K0">Startkapital (K0):</label>',
+                '<label for="K0">Startwert (K0):</label>',
                 '<input type="number" step="any" value="' . $k0 . '" alt="K0" name="K0" required>',
                 '',
-                '<label for="Kn">Endkapital (Kn):</label>',
+                '<label for="Kn">Endwert (Kn):</label>',
                 '<input type="number" step="any" value="' . $kn . '" alt="Kn" name="Kn" required>',
                 '',
                 '<label for="Jahre">Wiederholungen:</label>',
