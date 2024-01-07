@@ -35,8 +35,8 @@ class basicHeader
     public function __toString(): string
     {
         $dir = self::$dir;
-        $themeStyle1 = $dir . "css/pico.css";
-        $themeStyle2 = $dir . "css/pico.fluid.classless.css";
+        $themeStyle1 = $dir . "css/pico.fluid.classless.css";
+        $themeStyle2 = $dir . "css/pico.css";
         $basicStyle = $dir . "css/BasicStyle.css";
         $navigationStyle = $dir . "css/navbar.css";
         $animateCss = $dir . "css/animate.min.css";

@@ -42,11 +42,12 @@ nav ul li {
 
 .nav-toggle {
     position: fixed;
-    top: 25px;
-    left: 25px;
+    top: 15px;
+    left: 20px;
     display: none;
     width: 30px;
     height: 23px;
+    z-index: 3;
 }
 
 @media (max-width: 900px) {

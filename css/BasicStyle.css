@@ -82,6 +82,18 @@ h1 {
     margin: 0;
 }
 
+.formula-btn {
+    margin: 0 10px;
+    cursor: help;
+}
+
+.formula-btn-reg {
+    margin: auto;
+    width: 30rem;
+    max-width: 90%;
+}
+
+
 @media (max-width: 900px) {
     .bigTop {
         width: 95%;
@@ -97,5 +109,8 @@ h1 {
     }
     .basicArticle {
         max-width: 97%;
+    }
+    .formula-btn {
+        margin: 10px 5px 0 5px;
     }
 }

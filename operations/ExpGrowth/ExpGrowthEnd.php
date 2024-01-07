@@ -106,9 +106,23 @@ echo (new basicNav("ExpGrowthEnd.php"));
     ?>
     </div>
 
+    <br />
+
+    <button id="formula" class="contrast outline formula-btn formula-btn-reg" onclick="formula()">Formel ansehen</button>
+
+    <script>
+        function formula() {
+            Swal.fire({
+                title: "Formel für <mark>K<sub>n</sub></mark>",
+                html: 'Die Formel für K<sub>n</sub> ist:<br><mark>K<sub>n</sub> = K<sub>0</sub> × q<sup>n</sup></mark><br><mark>K<sub>0</sub></mark> ist dabei der Startwert, also der Wert der am Anfang gegeben wurde.<br><mark>q</mark> ist der Prozentsatz, dieser ergibt sich aus <i>p × 100 + 1</i>, wobei p für "Prozent" steht.' +
+                    '<br><mark>n</mark> (genutzt in q<sup>n</sup>) ist die Anzahl der Wiederholungen, also wie oft K<sub>0</sub> exponiert werden soll.',
+                icon: "question"
+            });
+        }
+    </script>
+
 </main>
 
-<br/>
 <br/>
 <br/>
 

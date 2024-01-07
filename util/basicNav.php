@@ -26,7 +26,7 @@ class basicNav
             '<nav>',
                 '<div class="nav-logo">Logo</div>',
                 '<div class="nav-toggle">',
-                    '<span class="material-symbols-outlined">menu</span>',
+                    '<span class="material-symbols-outlined" style="font-size: 2.5rem;">menu</span>',
                 '</div>',
                 '<div class="nav-content animate__animated">',
                     '<ul>',
