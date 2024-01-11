@@ -14,7 +14,7 @@
 
 <?php
 include "../../util/basicNav.php";
-echo (new basicNav("ExpGrowthEnd.php"));
+echo (new basicNav("ExpGrowthStart.php"));
 ?>
 
 <br />
@@ -35,10 +35,10 @@ echo (new basicNav("ExpGrowthEnd.php"));
                 '<label for="Kn">Endwert (Kn):</label>',
                 '<input type="number" step="any" value="0" alt="Kn" name="Kn" required>',
                 '',
-                '<label for="Prozent">Prozent:</label>',
+                '<label for="Prozent">Prozentsatz (p):</label>',
                 '<input type="number" step="any" value="2.5" alt="Prozent" name="Prozent" required contenteditable="true">',
                 '',
-                '<label for="Jahre">Wiederholungen:</label>',
+                '<label for="Jahre">Wiederholungen (n):</label>',
                 '<input type="number" step="any" value="2" alt="Jahre" name="Jahre" required>',
                 '<br />',
                 '<label for="Nachkommastellen"><i>Nachkommastellen:</i></label>',
@@ -72,10 +72,10 @@ echo (new basicNav("ExpGrowthEnd.php"));
                 '<label for="Kn">Endwert (Kn):</label>',
                 '<input type="number" step="any" value="' . $kn . '" alt="Kn" name="Kn" required>',
                 '',
-                '<label for="Prozent">Prozent:</label>',
+                '<label for="Prozent">Prozentsatz (p):</label>',
                 '<input type="number" step="any" value="' . $p . '" alt="Prozent" name="Prozent" required>',
                 '',
-                '<label for="Jahre">Wiederholungen:</label>',
+                '<label for="Jahre">Wiederholungen (n):</label>',
                 '<input type="number" step="any" value="' . $n . '" alt="Jahre" name="Jahre" required>',
                 '<br />',
                 '<label for="Nachkommastellen"><i>Nachkommastellen:</i></label>',

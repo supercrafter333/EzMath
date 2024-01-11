@@ -53,9 +53,10 @@ echo (new basicNav());
     </article>
 
     <article class="basicArticle">
-        <h3>Prozentsatz <mark>q</mark> und <mark>q</mark> berechnen</h3>
+        <h3>Prozentfaktor <mark>q</mark> und Prozentsatz <mark>q</mark> berechnen</h3>
         <br />
         <a role="button" href="ExpGrowthPercentage.php">Zum Rechner</a>
+        <a role="button" href="#" onclick="p()" class="contrast outline formula-btn">Formel</a>
     </article>
 
     <article class="basicArticle">
@@ -79,6 +80,16 @@ echo (new basicNav());
                 title: "Formel für <mark>K<sub>0</sub></mark>",
                 html: 'Die Formel für K<sub>0</sub> ist:<br><mark>K<sub>0</sub> = K<sub>n</sub> ÷ q<sup>n</sup></mark><br><mark>K<sub>n</sub></mark> ist dabei der Endwert, also der Wert der nach dem exponieren herauskommt.<br><mark>q</mark> ist der Prozentsatz, dieser ergibt sich aus <i>p × 100 + 1</i>, wobei p für "Prozent" steht.' +
                     '<br><mark>n</mark> (genutzt in q<sup>n</sup>) ist die Anzahl der Wiederholungen, also wie oft K<sub>n</sub> exponiert wurde.',
+                icon: "question"
+            });
+        }
+
+        function p() {
+            Swal.fire({
+                title: "Formel für <mark>q</mark> und <mark>p</mark>",
+                html: 'Die Formel für q ist:<br><mark>q = <sup>n</sup>√(K<sub>n</sub> ÷ K<sub>0</sub>)</mark><br><mark>K<sub>n</sub></mark> ist dabei der Endwert, also der Wert der nach dem exponieren herauskommt.<br><mark>K<sub>0</sub></mark> ist der Startwert, also der Wert der am Anfang gegeben wurde.' +
+                    '<br><mark>n</mark> (genutzt in q<sup>n</sup>) ist die Anzahl der Wiederholungen, also wie oft K<sub>n</sub> exponiert wurde.<br />' +
+                    'Die Formel für p ist:<br><mark>p = (q - 1) ÷ 100</mark><mark>q</mark>, der Prozentfaktor, wird mit der oberen Formel berechnet.',
                 icon: "question"
             });
         }
