@@ -23,13 +23,24 @@ function activateLoader() {
 function copyResult(elementCount) {
     var result = document.getElementsByClassName('result')[elementCount];
 
-    navigator.clipboard.writeText(result.textContent);
-
-    Swal.fire({
-        position: "top-end",
-        icon: "success",
-        title: "Ergebnis in Zwischenablage kopiert!",
-        showConfirmButton: false,
-        timer: 1500
-    });
+    navigator.clipboard.writeText(result.textContent)
+        .then(() => {
+            Swal.fire({
+                position: "top-end",
+                icon: "success",
+                title: "Ergebnis in Zwischenablage kopiert!",
+                showConfirmButton: false,
+                timer: 1500
+            });
+        })
+        .catch(() => {
+            Swal.fire({
+                position: "top-end",
+                icon: "error",
+                title: "Ergebnis konnte nicht in Zwischenablage kopiert werden!",
+                text: "Bitte nutze einen anderen Browser, z.B. Chrome, Firefox, Opera oder Brave",
+                showConfirmButton: false,
+                timer: 3000
+            });
+        });
 }

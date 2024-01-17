@@ -85,7 +85,7 @@ nav ul li {
         display: flex;
     }
 }
-@media (min-width: 901px) {
+@media (min-width: 1201px) {
     nav {
         min-height: 80px;
         background: black;

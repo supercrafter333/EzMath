@@ -57,7 +57,7 @@ echo (new basicNav("ExpGrowthPercentage.php"));
                 '<progress id="loader" style="display: none;"></progress>'
             ]);
         } else {
-            include "../../calcOps/ExpGrowthQP.php";
+            include "../../calcOps/ExpGrowth/ExpGrowthQP.php";
             $k0 = htmlspecialchars($_POST["K0"]);
             $kn = htmlspecialchars($_POST["Kn"]);
             $n = htmlspecialchars($_POST["Jahre"]);
