@@ -3,7 +3,7 @@
 readonly class SmartResult
 {
 
-    public function __construct(private string $searchedValue, private array $givenValues, private string $operationMethod, private int|float|string|null $result) {}
+    public function __construct(private string $searchedValue, private array $givenValues, private string $operationMethod, private int|float|string|null $result, private array|null $calcWay = null) {}
 
     /**
      * @return string
@@ -36,5 +36,18 @@ readonly class SmartResult
     public function getResult(int $dezimalPrecision = 2): float|int|string|null
     {
         return round($this->result, $dezimalPrecision);
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getCalcWay(): ?array
+    {
+        $calcWay = $this->calcWay;
+        if (is_array($calcWay)) {
+            $calcWayLast = array_pop($calcWay);
+            $calcWay[] = "<mark>" . $calcWayLast . "</mark>";
+        }
+        return $calcWay;
     }
 }

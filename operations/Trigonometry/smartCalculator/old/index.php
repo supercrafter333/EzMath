@@ -8,7 +8,7 @@
  * Dieses Projekt wird unter der Lizenz Apache License 2.0 veröffentlicht.
  */
 
-include "ComplexSmartCalculator.php";
+include "SmartCalculator.php";
 include "../../../../util/complexResultArticle.php";
 ?>
 
@@ -44,70 +44,7 @@ echo (new basicNav());
     </div>
 
     <div class="bigView">
-
-        <div class="slideshow-container">
-
-            <div class="mySlides fade">
-                <div class="numbertext">1 / 3</div>
-                <img src="../../../../media/img/right_triangle_with_angles.png" style="width:98%">
-                <div class="text">Rechter Winkel bei Gamma (γ)</div>
-            </div>
-
-            <div class="mySlides fade">
-                <div class="numbertext">2 / 3</div>
-                <img src="../../../../media/img/right_triangle_with_angles_alpha.png" style="width:98%">
-                <div class="text">Rechter Winkel bei Alpha (α)</div>
-            </div>
-
-            <div class="mySlides fade">
-                <div class="numbertext">3 / 3</div>
-                <img src="../../../../media/img/right_triangle_with_angles_beta.png" style="width:98%">
-                <div class="text">Rechter Winkel bei Beta (β)</div>
-            </div>
-            <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
-            <a class="next" onclick="plusSlides(1)">&#10095;</a>
-    </div>
-    <br>
-
-    <!--<div style="text-align:center">
-        <span class="dot" onclick="currentSlide(1)"></span>
-        <span class="dot" onclick="currentSlide(2)"></span>
-        <span class="dot" onclick="currentSlide(3)"></span>
-    </div>-->
-
-    <script>
-        let slideIndex = 1;
-        showSlides(slideIndex);
-
-        function plusSlides(n) {
-            showSlides(slideIndex += n);
-        }
-
-        function currentSlide(n) {
-            showSlides(slideIndex = n);
-        }
-
-        function showSlides(n) {
-            let i;
-            let slides = document.getElementsByClassName("mySlides");
-            let dots = document.getElementsByClassName("dot");
-            if (n > slides.length) {slideIndex = 1}
-            if (n < 1) {slideIndex = slides.length}
-            for (i = 0; i < slides.length; i++) {
-                slides[i].style.display = "none";
-            }
-            for (i = 0; i < dots.length; i++) {
-                dots[i].className = dots[i].className.replace(" active", "");
-            }
-            slides[slideIndex-1].style.display = "block";
-            dots[slideIndex-1].className += " active";
-            /*var gamma = document.getElementById("gamma");
-            var alpha = document.getElementById("alpha");
-            var beta = document.getElementById("beta");*/
-        }
-    </script>
-
-        <!--<img src="../../../../media/img/right_triangle_with_angles.png" alt="Bild eines Dreickes mit Winkeln- und Seitenbeschreibungen">-->
+        <img src="../../../../media/img/right_triangle_with_angles.png" alt="Bild eines Dreickes mit Winkeln- und Seitenbeschreibungen">
     </div>
 
     <br>
@@ -118,7 +55,6 @@ echo (new basicNav());
 
     $alpha = $_POST["alpha"] ?? 0;
     $beta = $_POST["beta"] ?? 0;
-    $gamma = $_POST["gamma"] ?? 90;
     $a = $_POST["a"] ?? 0;
     $b = $_POST["b"] ?? 0;
     $c = $_POST["c"] ?? 0;
@@ -126,7 +62,7 @@ echo (new basicNav());
 
     if (isset($_POST["searchedVal"])) {
         if (isset($_POST["alpha"]) || isset($_POST["beta"]))
-            $results = ComplexSmartCalculator::getResult($_POST["searchedVal"], array_filter(["alpha" => $alpha, "beta" => $beta], fn($value) => !is_null($value) && $value !== 0), array_filter(["a" => $a, "b" => $b, "c" => $c], fn($value) => !is_null($value) && $value !== 0));
+            $results = SmartCalculator::getResult($_POST["searchedVal"], array_filter(["alpha" => $alpha, "beta" => $beta], fn($value) => !is_null($value) && $value !== 0), array_filter(["a" => $a, "b" => $b, "c" => $c], fn($value) => !is_null($value) && $value !== 0));
         if ($results === null) resultError();
     }
 
@@ -144,9 +80,9 @@ echo (new basicNav());
     if (is_array($results)) {
         $matchSearchedType = match ($results[0][0]) {
             "a", "b", "c" => "Seite",
-            "alpha", "beta", "gamma" => "Winkel"
+            "alpha", "beta" => "Winkel"
         };
-        $resArticle = new complexResultArticle($results->getSearchedValue(), $results->getGivenValues(), $results->getOperationMethod(), $results->getResult(), $matchSearchedType . " " . $results->getSearchedValue());
+        $resArticle = new complexResultArticle($results[0][0], $results[0][1][1], $results[0][1][0], round($results[1], intval($_POST["Nachkommastellen"] ?? 2)), $matchSearchedType . " " . $results[0][0]);
         echo $resArticle->__toString();
     }
     ?>
@@ -159,10 +95,9 @@ echo (new basicNav());
             <h4>Gesuchter Wert:</h4>
 
             <label for="searchedVal"></label>
-            <select name="searchedVal"  required>
+            <select name="searchedVal" required>
                 <option value="alpha">Alpha (α)</option>
                 <option value="beta">Beta (β)</option>
-                <option value="gamma">Gamma (γ)</option>
                 <option value="a">Seite a</option>
                 <option value="b">Seite b</option>
                 <option value="c">Seite c</option>
@@ -173,19 +108,14 @@ echo (new basicNav());
 
             <h4>Gegebene Werte:</h4>
 
-            <div class="grid" data-tooltip="Ein Winkel muss 90° haben!">
+            <div class="grid">
                 <span>
                     <label for="alpha">Winkel Alpha (α):</label>
                     <input type="number" step="any" name="alpha" id="alpha"  value="<?php echo $alpha; ?>">
                 </span>
                 <span>
-                    <label for="beta">Winkel Beta (β):</label>
+                    <label for="">Winkel Beta (β):</label>
                     <input type="number" step="any" name="beta" id="beta" value="<?php echo $beta; ?>">
-                </span>
-
-                <span>
-                    <label for="gamma">Winkel Gamma (γ):</label>
-                    <input type="number" step="any" name="gamma" id="gamma" value="<?php echo ($gamma !== null && $gamma !== 0) ? $gamma : 90; ?>">
                 </span>
             </div>
 
@@ -203,6 +133,19 @@ echo (new basicNav());
                     <input type="number" step="any" name="c" id="c" value="<?php echo $c; ?>">
                 </span>
             </div>
+
+            <label for="Nachkommastellen"><i>Nachkommastellen:</i></label>
+            <select name="Nachkommastellen" required>
+                <option value="0">Volle Zahl</option>
+                <option value="1">1 Nachkommastelle</option>
+                <option value="2" selected>2 Nachkommastellen</option>
+                <option value="3">3 Nachkommastellen</option>
+                <option value="4">4 Nachkommastellen</option>
+                <option value="5">5 Nachkommastellen</option>
+                <option value="6">6 Nachkommastellen</option>
+                <option value="7">7 Nachkommastellen</option>
+                <option value="8">8 Nachkommastellen</option>
+            </select>
 
             <footer>
                 <input type="submit" value="Berechnen">

@@ -8,3 +8,5 @@ echo "\n" . var_dump(sin(deg2rad(30)));
 echo "\n" . var_dump(rad2deg(asin(5 / 12)));
 
 echo PHP_EOL . PHP_EOL . var_dump("lul:" . TrigonometryHelper::tanAngle(2.5, 5));
+
+var_dump(in_array(90, ["x" => "20", "y" => "90"]));

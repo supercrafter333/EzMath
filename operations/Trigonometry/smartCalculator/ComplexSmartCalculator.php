@@ -1,9 +1,10 @@
 <?php
 
+include "../../../util/ComplexTrigonometryHelper.php";
 include "../../../util/TrigonometryHelper.php";
 include "SmartResult.php";
-include "../../../../calcOps/Pythagoras/PythagorasHyp.php";
-include "../../../../calcOps/Pythagoras/PythagorasKat.php";
+include "../../../calcOps/Pythagoras/PythagorasHyp.php";
+include "../../../calcOps/Pythagoras/PythagorasKat.php";
 
 final class ComplexSmartCalculator
 {
@@ -75,9 +76,17 @@ final class ComplexSmartCalculator
         if (!self::validateAngles($angles)) return null;
 
         if (count(self::getRightAngleAngles($angles)) > 1) return null;
-        $rightAngle = array_keys(self::getRightAngleAngles($angles))[0];
 
-        if (empty($sides)) return null;
+        if (count($angles) >= 3 && self::sumAngles($angles) > 180) return null;
+        
+        if (isset($angles[$searched])) {
+            return new SmartResult($searched, [$searched => $angles[$searched]], "Gegebener Wert", $angles[$searched]);
+        }
+        if (isset($sides[$searched])) {
+            return new SmartResult($searched, [$searched => $sides[$searched]], "Gegebener Wert", $sides[$searched]);
+        }
+
+        $rightAngle = array_keys(self::getRightAngleAngles($angles))[0];
 
         if (strtolower($rightAngle) === "gamma")
             return self::calcForGamma($searched, self::getNonRightAngleAngles($angles), $sides, $searchedType);
@@ -190,7 +199,11 @@ final class ComplexSmartCalculator
     {
 
         if (count($angles) === 1 && $searchedType === "angle")
-            return new SmartResult($searched, [array_keys($angles)[0] => $angles[array_keys($angles)[0]]], "Innenwinkelsatz", (90 - array_values($angles)[0]));
+            return new SmartResult($searched, [array_keys($angles)[0] => $angles[array_keys($angles)[0]]], "Innenwinkelsatz", (90 - array_values($angles)[0]),
+                [
+                    "90° - GEGEBENER_WINKEL = GESUCHTER_WINKEL",
+                    "<mark>90° - " . $angles[array_keys($angles)[0]] . "° = ~RESULT~°</mark>"
+                ]);
 
         if (empty($sides)) return null;
         $sideCount = count($sides);
@@ -227,13 +240,13 @@ final class ComplexSmartCalculator
 
             if (self::simpleArraySearch($availableOperations["sin"], $sides)) {
                 $vals = array_values($availableOperations["sin"]);
-                return new SmartResult($searched, [$vals[0] => $sides[$vals[0]], $vals[1] => $sides[$vals[1]]], "sin", TrigonometryHelper::sinAngle($sides[$vals[0]], $sides[$vals[1]]));
+                return new SmartResult($searched, [$vals[0] => $sides[$vals[0]], $vals[1] => $sides[$vals[1]]], "sin", ($res = ComplexTrigonometryHelper::sinAngle($sides[$vals[0]], $sides[$vals[1]], $searched))["result"], $res["calcWay"]);
             } elseif (self::simpleArraySearch($availableOperations["cos"], $sides)) {
                 $vals = array_values($availableOperations["cos"]);
-                return new SmartResult($searched, [$vals[0] => $sides[$vals[0]], $vals[1] => $sides[$vals[1]]], "cos", TrigonometryHelper::cosAngle($sides[$vals[0]], $sides[$vals[1]]));
+                return new SmartResult($searched, [$vals[0] => $sides[$vals[0]], $vals[1] => $sides[$vals[1]]], "cos", ($res = ComplexTrigonometryHelper::cosAngle($sides[$vals[0]], $sides[$vals[1]], $searched))["result"], $res["calcWay"]);
             } elseif (self::simpleArraySearch($availableOperations["tan"], $sides)) {
                 $vals = array_values($availableOperations["tan"]);
-                return new SmartResult($searched, [$vals[0] => $sides[$vals[0]], $vals[1] => $sides[$vals[1]]], "tan", TrigonometryHelper::tanAngle($sides[$vals[0]], $sides[$vals[1]]));
+                return new SmartResult($searched, [$vals[0] => $sides[$vals[0]], $vals[1] => $sides[$vals[1]]], "tan", ($res = ComplexTrigonometryHelper::tanAngle($sides[$vals[0]], $sides[$vals[1]], $searched))["result"], $res["calcWay"]);
             }
         }
 
@@ -244,13 +257,13 @@ final class ComplexSmartCalculator
 
             if (self::simpleArraySearch($availableOperations["sin"], $sides)) {
                 $vals = array_values($availableOperations["sin"]);
-                return new SmartResult($searched, [$vals[0] => $sides[$vals[0]], $vals[1] => $sides[$vals[1]]], "sin", TrigonometryHelper::sinAngle($sides[$vals[0]], $sides[$vals[1]]));
+                return new SmartResult($searched, [$vals[0] => $sides[$vals[0]], $vals[1] => $sides[$vals[1]]], "sin", ($res = ComplexTrigonometryHelper::sinAngle($sides[$vals[0]], $sides[$vals[1]], $searched))["result"], $res["calcWay"]);
             } elseif (self::simpleArraySearch($availableOperations["cos"], $sides)) {
                 $vals = array_values($availableOperations["cos"]);
-                return new SmartResult($searched, [$vals[0] => $sides[$vals[0]], $vals[1] => $sides[$vals[1]]], "cos", TrigonometryHelper::cosAngle($sides[$vals[0]], $sides[$vals[1]]));
+                return new SmartResult($searched, [$vals[0] => $sides[$vals[0]], $vals[1] => $sides[$vals[1]]], "cos", ($res = ComplexTrigonometryHelper::cosAngle($sides[$vals[0]], $sides[$vals[1]], $searched))["result"], $res["calcWay"]);
             } elseif (self::simpleArraySearch($availableOperations["tan"], $sides)) {
                 $vals = array_values($availableOperations["tan"]);
-                return new SmartResult($searched, [$vals[0] => $sides[$vals[0]], $vals[1] => $sides[$vals[1]]], "tan", TrigonometryHelper::tanAngle($sides[$vals[0]], $sides[$vals[1]]));
+                return new SmartResult($searched, [$vals[0] => $sides[$vals[0]], $vals[1] => $sides[$vals[1]]], "tan", ($res = ComplexTrigonometryHelper::tanAngle($sides[$vals[0]], $sides[$vals[1]], $searched))["result"], $res["calcWay"]);
             }
         }
 
@@ -266,23 +279,23 @@ final class ComplexSmartCalculator
                     case "a":
                         if (isset($sides["a"])) return new SmartResult($searched, ["a" => $sides["a"]], "---", $sides["a"]);
                         if ($zeroSide === "b")
-                            return new SmartResult($searched, ["alpha" => $angles["alpha"], $zeroSide => $sides[$zeroSide]], "tan", TrigonometryHelper::tanSideOpp($angles["alpha"], $sides[$zeroSide]));
+                            return new SmartResult($searched, ["alpha" => $angles["alpha"], $zeroSide => $sides[$zeroSide]], "tan", ($res = ComplexTrigonometryHelper::tanSideOpp($angles["alpha"], $sides[$zeroSide], $searched))["result"], $res["calcWay"]);
                         if ($zeroSide === "c")
-                            return new SmartResult($searched, ["alpha" => $angles["alpha"], $zeroSide => $sides[$zeroSide]], "sin", TrigonometryHelper::sinSideOpp($angles["alpha"], $sides[$zeroSide]));
+                            return new SmartResult($searched, ["alpha" => $angles["alpha"], $zeroSide => $sides[$zeroSide]], "sin", ($res = ComplexTrigonometryHelper::sinSideOpp($angles["alpha"], $sides[$zeroSide], $searched))["result"], $res["calcWay"]);
                         break;
                     case "b":
                         if (isset($sides["b"])) return new SmartResult($searched, ["b" => $sides["b"]], "---", $sides["b"]);
                         if ($zeroSide === "a")
-                            return new SmartResult($searched, ["alpha" => $angles["alpha"], $zeroSide => $sides[$zeroSide]], "tan", TrigonometryHelper::tanSideAdj($angles["alpha"], $sides[$zeroSide]));
+                            return new SmartResult($searched, ["alpha" => $angles["alpha"], $zeroSide => $sides[$zeroSide]], "tan", ($res = ComplexTrigonometryHelper::tanSideAdj($angles["alpha"], $sides[$zeroSide], $searched))["result"], $res["calcWay"]);
                         if ($zeroSide === "c")
-                            return new SmartResult($searched, ["alpha" => $angles["alpha"], $zeroSide => $sides[$zeroSide]], "cos", TrigonometryHelper::cosSideAdj($angles["alpha"], $sides[$zeroSide]));
+                            return new SmartResult($searched, ["alpha" => $angles["alpha"], $zeroSide => $sides[$zeroSide]], "cos", ($res = ComplexTrigonometryHelper::cosSideAdj($angles["alpha"], $sides[$zeroSide], $searched))["result"], $res["calcWay"]);
                         break;
                     case "c":
                         if (isset($sides["c"])) return new SmartResult($searched, ["c" => $sides["c"]], "---", $sides["c"]);
                         if ($zeroSide === "a")
-                            return new SmartResult($searched, ["alpha" => $angles["alpha"], $zeroSide => $sides[$zeroSide]], "sin", TrigonometryHelper::sinSideHyp($angles["alpha"], $sides[$zeroSide]));
+                            return new SmartResult($searched, ["alpha" => $angles["alpha"], $zeroSide => $sides[$zeroSide]], "sin", ($res = ComplexTrigonometryHelper::sinSideHyp($angles["alpha"], $sides[$zeroSide], $searched))["result"], $res["calcWay"]);
                         if ($zeroSide === "b")
-                            return new SmartResult($searched, ["alpha" => $angles["alpha"], $zeroSide => $sides[$zeroSide]], "cos", TrigonometryHelper::cosSideHyp($angles["alpha"], $sides[$zeroSide]));
+                            return new SmartResult($searched, ["alpha" => $angles["alpha"], $zeroSide => $sides[$zeroSide]], "cos", ($res = ComplexTrigonometryHelper::cosSideHyp($angles["alpha"], $sides[$zeroSide], $searched))["result"], $res["calcWay"]);
                         break;
                 };
             }
@@ -291,23 +304,23 @@ final class ComplexSmartCalculator
                     case "a":
                         if (isset($sides["a"])) return new SmartResult($searched, ["a" => $sides["a"]], "---", $sides["a"]);
                         if ($zeroSide === "b")
-                            return new SmartResult($searched, ["beta" => $angles["beta"], $zeroSide => $sides[$zeroSide]], "tan", TrigonometryHelper::tanSideAdj($angles["beta"], $sides[$zeroSide]));
+                            return new SmartResult($searched, ["beta" => $angles["beta"], $zeroSide => $sides[$zeroSide]], "tan", ($res = ComplexTrigonometryHelper::tanSideAdj($angles["beta"], $sides[$zeroSide], $searched))["result"], $res["calcWay"]);
                         if ($zeroSide === "c")
-                            return new SmartResult($searched, ["beta" => $angles["beta"], $zeroSide => $sides[$zeroSide]], "cos", TrigonometryHelper::cosSideAdj($angles["beta"], $sides[$zeroSide]));
+                            return new SmartResult($searched, ["beta" => $angles["beta"], $zeroSide => $sides[$zeroSide]], "cos", ($res = ComplexTrigonometryHelper::cosSideAdj($angles["beta"], $sides[$zeroSide], $searched))["result"], $res["calcWay"]);
                         break;
                     case "b":
                         if (isset($sides["b"])) return new SmartResult($searched, ["b" => $sides["b"]], "---", $sides["b"]);
                         if ($zeroSide === "a")
-                            return new SmartResult($searched, ["beta" => $angles["beta"], $zeroSide => $sides[$zeroSide]], "tan", TrigonometryHelper::tanSideOpp($angles["beta"], $sides[$zeroSide]));
+                            return new SmartResult($searched, ["beta" => $angles["beta"], $zeroSide => $sides[$zeroSide]], "tan", ($res = ComplexTrigonometryHelper::tanSideOpp($angles["beta"], $sides[$zeroSide], $searched))["result"], $res["calcWay"]);
                         if ($zeroSide === "c")
-                            return new SmartResult($searched, ["beta" => $angles["beta"], $zeroSide => $sides[$zeroSide]], "sin", TrigonometryHelper::sinSideOpp($angles["beta"], $sides[$zeroSide]));
+                            return new SmartResult($searched, ["beta" => $angles["beta"], $zeroSide => $sides[$zeroSide]], "sin", ($res = ComplexTrigonometryHelper::sinSideOpp($angles["beta"], $sides[$zeroSide], $searched))["result"], $res["calcWay"]);
                         break;
                     case "c":
                         if (isset($sides["c"])) return new SmartResult($searched, ["c" => $sides["c"]], "---", $sides["c"]);
                         if ($zeroSide === "a")
-                            return new SmartResult($searched, ["beta" => $angles["beta"], $zeroSide => $sides[$zeroSide]], "cos", TrigonometryHelper::cosSideHyp($angles["beta"], $sides[$zeroSide]));
+                            return new SmartResult($searched, ["beta" => $angles["beta"], $zeroSide => $sides[$zeroSide]], "cos", ($res = ComplexTrigonometryHelper::cosSideHyp($angles["beta"], $sides[$zeroSide], $searched))["result"], $res["calcWay"]);
                         if ($zeroSide === "b")
-                            return new SmartResult($searched, ["beta" => $angles["beta"], $zeroSide => $sides[$zeroSide]], "sin", TrigonometryHelper::sinSideHyp($angles["beta"], $sides[$zeroSide]));
+                            return new SmartResult($searched, ["beta" => $angles["beta"], $zeroSide => $sides[$zeroSide]], "sin", ($res = ComplexTrigonometryHelper::sinSideHyp($angles["beta"], $sides[$zeroSide], $searched))["result"], $res["calcWay"]);
                         break;
                 };
             }
@@ -358,13 +371,13 @@ final class ComplexSmartCalculator
 
             if (self::simpleArraySearch($availableOperations["sin"], $sides)) {
                 $vals = array_values($availableOperations["sin"]);
-                return new SmartResult($searched, [$vals[0] => $sides[$vals[0]], $vals[1] => $sides[$vals[1]]], "sin", TrigonometryHelper::sinAngle($sides[$vals[0]], $sides[$vals[1]]));
+                return new SmartResult($searched, [$vals[0] => $sides[$vals[0]], $vals[1] => $sides[$vals[1]]], "sin", ($res = ComplexTrigonometryHelper::sinAngle($sides[$vals[0]], $sides[$vals[1]], $searched))["result"], $res["calcWay"]);
             } elseif (self::simpleArraySearch($availableOperations["cos"], $sides)) {
                 $vals = array_values($availableOperations["cos"]);
-                return new SmartResult($searched, [$vals[0] => $sides[$vals[0]], $vals[1] => $sides[$vals[1]]], "cos", TrigonometryHelper::cosAngle($sides[$vals[0]], $sides[$vals[1]]));
+                return new SmartResult($searched, [$vals[0] => $sides[$vals[0]], $vals[1] => $sides[$vals[1]]], "cos", ($res = ComplexTrigonometryHelper::cosAngle($sides[$vals[0]], $sides[$vals[1]], $searched))["result"], $res["calcWay"]);
             } elseif (self::simpleArraySearch($availableOperations["tan"], $sides)) {
                 $vals = array_values($availableOperations["tan"]);
-                return new SmartResult($searched, [$vals[0] => $sides[$vals[0]], $vals[1] => $sides[$vals[1]]], "tan", TrigonometryHelper::tanAngle($sides[$vals[0]], $sides[$vals[1]]));
+                return new SmartResult($searched, [$vals[0] => $sides[$vals[0]], $vals[1] => $sides[$vals[1]]], "tan", ($res = ComplexTrigonometryHelper::tanAngle($sides[$vals[0]], $sides[$vals[1]], $searched))["result"], $res["calcWay"]);
             }
         }
 
@@ -375,13 +388,13 @@ final class ComplexSmartCalculator
 
             if (self::simpleArraySearch($availableOperations["sin"], $sides)) {
                 $vals = array_values($availableOperations["sin"]);
-                return new SmartResult($searched, [$vals[0] => $sides[$vals[0]], $vals[1] => $sides[$vals[1]]], "sin", TrigonometryHelper::sinAngle($sides[$vals[0]], $sides[$vals[1]]));
+                return new SmartResult($searched, [$vals[0] => $sides[$vals[0]], $vals[1] => $sides[$vals[1]]], "sin", ($res = ComplexTrigonometryHelper::sinAngle($sides[$vals[0]], $sides[$vals[1]], $searched))["result"], $res["calcWay"]);
             } elseif (self::simpleArraySearch($availableOperations["cos"], $sides)) {
                 $vals = array_values($availableOperations["cos"]);
-                return new SmartResult($searched, [$vals[0] => $sides[$vals[0]], $vals[1] => $sides[$vals[1]]], "cos", TrigonometryHelper::cosAngle($sides[$vals[0]], $sides[$vals[1]]));
+                return new SmartResult($searched, [$vals[0] => $sides[$vals[0]], $vals[1] => $sides[$vals[1]]], "cos", ($res = ComplexTrigonometryHelper::cosAngle($sides[$vals[0]], $sides[$vals[1]], $searched))["result"], $res["calcWay"]);
             } elseif (self::simpleArraySearch($availableOperations["tan"], $sides)) {
                 $vals = array_values($availableOperations["tan"]);
-                return new SmartResult($searched, [$vals[0] => $sides[$vals[0]], $vals[1] => $sides[$vals[1]]], "tan", TrigonometryHelper::tanAngle($sides[$vals[0]], $sides[$vals[1]]));
+                return new SmartResult($searched, [$vals[0] => $sides[$vals[0]], $vals[1] => $sides[$vals[1]]], "tan", ($res = ComplexTrigonometryHelper::tanAngle($sides[$vals[0]], $sides[$vals[1]], $searched))["result"], $res["calcWay"]);
             }
         }
 
@@ -397,23 +410,23 @@ final class ComplexSmartCalculator
                     case "a":
                         if (isset($sides["a"])) return new SmartResult($searched, ["a" => $sides["a"]], "---", $sides["a"]);
                         if ($zeroSide === "b")
-                            return new SmartResult($searched, ["gamma" => $angles["gamma"], $zeroSide => $sides[$zeroSide]], "cos", TrigonometryHelper::cosSideHyp($angles["gamma"], $sides[$zeroSide]));
+                            return new SmartResult($searched, ["gamma" => $angles["gamma"], $zeroSide => $sides[$zeroSide]], "cos", ($res = ComplexTrigonometryHelper::cosSideHyp($angles["gamma"], $sides[$zeroSide], $searched))["result"], $res["calcWay"]);
                         if ($zeroSide === "c")
-                            return new SmartResult($searched, ["gamma" => $angles["gamma"], $zeroSide => $sides[$zeroSide]], "sin", TrigonometryHelper::sinSideHyp($angles["gamma"], $sides[$zeroSide]));
+                            return new SmartResult($searched, ["gamma" => $angles["gamma"], $zeroSide => $sides[$zeroSide]], "sin", ($res = ComplexTrigonometryHelper::sinSideHyp($angles["gamma"], $sides[$zeroSide], $searched))["result"], $res["calcWay"]);
                         break;
                     case "b":
                         if (isset($sides["b"])) return new SmartResult($searched, ["b" => $sides["b"]], "---", $sides["b"]);
                         if ($zeroSide === "a")
-                            return new SmartResult($searched, ["gamma" => $angles["gamma"], $zeroSide => $sides[$zeroSide]], "cos", TrigonometryHelper::cosSideAdj($angles["gamma"], $sides[$zeroSide]));
+                            return new SmartResult($searched, ["gamma" => $angles["gamma"], $zeroSide => $sides[$zeroSide]], "cos", ($res = ComplexTrigonometryHelper::cosSideAdj($angles["gamma"], $sides[$zeroSide], $searched))["result"], $res["calcWay"]);
                         if ($zeroSide === "c")
-                            return new SmartResult($searched, ["gamma" => $angles["gamma"], $zeroSide => $sides[$zeroSide]], "tan", TrigonometryHelper::tanSideAdj($angles["gamma"], $sides[$zeroSide]));
+                            return new SmartResult($searched, ["gamma" => $angles["gamma"], $zeroSide => $sides[$zeroSide]], "tan", ($res = ComplexTrigonometryHelper::tanSideAdj($angles["gamma"], $sides[$zeroSide], $searched))["result"], $res["calcWay"]);
                         break;
                     case "c":
                         if (isset($sides["c"])) return new SmartResult($searched, ["c" => $sides["c"]], "---", $sides["c"]);
                         if ($zeroSide === "a")
-                            return new SmartResult($searched, ["gamma" => $angles["gamma"], $zeroSide => $sides[$zeroSide]], "sin", TrigonometryHelper::sinSideOpp($angles["gamma"], $sides[$zeroSide]));
+                            return new SmartResult($searched, ["gamma" => $angles["gamma"], $zeroSide => $sides[$zeroSide]], "sin", ($res = ComplexTrigonometryHelper::sinSideOpp($angles["gamma"], $sides[$zeroSide], $searched))["result"], $res["calcWay"]);
                         if ($zeroSide === "b")
-                            return new SmartResult($searched, ["gamma" => $angles["gamma"], $zeroSide => $sides[$zeroSide]], "tan", TrigonometryHelper::tanSideOpp($angles["gamma"], $sides[$zeroSide]));
+                            return new SmartResult($searched, ["gamma" => $angles["gamma"], $zeroSide => $sides[$zeroSide]], "tan", ($res = ComplexTrigonometryHelper::tanSideOpp($angles["gamma"], $sides[$zeroSide], $searched))["result"], $res["calcWay"]);
                         break;
                 };
             }
@@ -422,23 +435,23 @@ final class ComplexSmartCalculator
                     case "a":
                         if (isset($sides["a"])) return new SmartResult($searched, ["a" => $sides["a"]], "---", $sides["a"]);
                         if ($zeroSide === "b")
-                            return new SmartResult($searched, ["beta" => $angles["beta"], $zeroSide => $sides[$zeroSide]], "sin", TrigonometryHelper::sinSideHyp($angles["beta"], $sides[$zeroSide]));
+                            return new SmartResult($searched, ["beta" => $angles["beta"], $zeroSide => $sides[$zeroSide]], "sin", ($res = ComplexTrigonometryHelper::sinSideHyp($angles["beta"], $sides[$zeroSide], $searched))["result"], $res["calcWay"]);
                         if ($zeroSide === "c")
-                            return new SmartResult($searched, ["beta" => $angles["beta"], $zeroSide => $sides[$zeroSide]], "cos", TrigonometryHelper::cosSideHyp($angles["beta"], $sides[$zeroSide]));
+                            return new SmartResult($searched, ["beta" => $angles["beta"], $zeroSide => $sides[$zeroSide]], "cos", ($res = ComplexTrigonometryHelper::cosSideHyp($angles["beta"], $sides[$zeroSide], $searched))["result"], $res["calcWay"]);
                         break;
                     case "b":
                         if (isset($sides["b"])) return new SmartResult($searched, ["b" => $sides["b"]], "---", $sides["b"]);
                         if ($zeroSide === "a")
-                            return new SmartResult($searched, ["beta" => $angles["beta"], $zeroSide => $sides[$zeroSide]], "sin", TrigonometryHelper::sinSideOpp($angles["beta"], $sides[$zeroSide]));
+                            return new SmartResult($searched, ["beta" => $angles["beta"], $zeroSide => $sides[$zeroSide]], "sin", ($res = ComplexTrigonometryHelper::sinSideOpp($angles["beta"], $sides[$zeroSide], $searched))["result"], $res["calcWay"]);
                         if ($zeroSide === "c")
-                            return new SmartResult($searched, ["beta" => $angles["beta"], $zeroSide => $sides[$zeroSide]], "tan", TrigonometryHelper::tanSideOpp($angles["beta"], $sides[$zeroSide]));
+                            return new SmartResult($searched, ["beta" => $angles["beta"], $zeroSide => $sides[$zeroSide]], "tan", ($res = ComplexTrigonometryHelper::tanSideOpp($angles["beta"], $sides[$zeroSide], $searched))["result"], $res["calcWay"]);
                         break;
                     case "c":
                         if (isset($sides["c"])) return new SmartResult($searched, ["c" => $sides["c"]], "---", $sides["c"]);
                         if ($zeroSide === "a")
-                            return new SmartResult($searched, ["beta" => $angles["beta"], $zeroSide => $sides[$zeroSide]], "cos", TrigonometryHelper::cosSideAdj($angles["beta"], $sides[$zeroSide]));
+                            return new SmartResult($searched, ["beta" => $angles["beta"], $zeroSide => $sides[$zeroSide]], "cos", ($res = ComplexTrigonometryHelper::cosSideAdj($angles["beta"], $sides[$zeroSide], $searched))["result"], $res["calcWay"]);
                         if ($zeroSide === "b")
-                            return new SmartResult($searched, ["beta" => $angles["beta"], $zeroSide => $sides[$zeroSide]], "tan", TrigonometryHelper::tanSideAdj($angles["beta"], $sides[$zeroSide]));
+                            return new SmartResult($searched, ["beta" => $angles["beta"], $zeroSide => $sides[$zeroSide]], "tan", ($res = ComplexTrigonometryHelper::tanSideAdj($angles["beta"], $sides[$zeroSide], $searched))["result"], $res["calcWay"]);
                         break;
                 };
             }
@@ -489,13 +502,13 @@ final class ComplexSmartCalculator
 
             if (self::simpleArraySearch($availableOperations["sin"], $sides)) {
                 $vals = array_values($availableOperations["sin"]);
-                return new SmartResult($searched, [$vals[0] => $sides[$vals[0]], $vals[1] => $sides[$vals[1]]], "sin", TrigonometryHelper::sinAngle($sides[$vals[0]], $sides[$vals[1]]));
+                return new SmartResult($searched, [$vals[0] => $sides[$vals[0]], $vals[1] => $sides[$vals[1]]], "sin", ($res = ComplexTrigonometryHelper::sinAngle($sides[$vals[0]], $sides[$vals[1]], $searched))["result"], $res["calcWay"]);
             } elseif (self::simpleArraySearch($availableOperations["cos"], $sides)) {
                 $vals = array_values($availableOperations["cos"]);
-                return new SmartResult($searched, [$vals[0] => $sides[$vals[0]], $vals[1] => $sides[$vals[1]]], "cos", TrigonometryHelper::cosAngle($sides[$vals[0]], $sides[$vals[1]]));
+                return new SmartResult($searched, [$vals[0] => $sides[$vals[0]], $vals[1] => $sides[$vals[1]]], "cos", ($res = ComplexTrigonometryHelper::cosAngle($sides[$vals[0]], $sides[$vals[1]], $searched))["result"], $res["calcWay"]);
             } elseif (self::simpleArraySearch($availableOperations["tan"], $sides)) {
                 $vals = array_values($availableOperations["tan"]);
-                return new SmartResult($searched, [$vals[0] => $sides[$vals[0]], $vals[1] => $sides[$vals[1]]], "tan", TrigonometryHelper::tanAngle($sides[$vals[0]], $sides[$vals[1]]));
+                return new SmartResult($searched, [$vals[0] => $sides[$vals[0]], $vals[1] => $sides[$vals[1]]], "tan", ($res = ComplexTrigonometryHelper::tanAngle($sides[$vals[0]], $sides[$vals[1]], $searched))["result"], $res["calcWay"]);
             }
         }
 
@@ -506,13 +519,13 @@ final class ComplexSmartCalculator
 
             if (self::simpleArraySearch($availableOperations["sin"], $sides)) {
                 $vals = array_values($availableOperations["sin"]);
-                return new SmartResult($searched, [$vals[0] => $sides[$vals[0]], $vals[1] => $sides[$vals[1]]], "sin", TrigonometryHelper::sinAngle($sides[$vals[0]], $sides[$vals[1]]));
+                return new SmartResult($searched, [$vals[0] => $sides[$vals[0]], $vals[1] => $sides[$vals[1]]], "sin", ($res = ComplexTrigonometryHelper::sinAngle($sides[$vals[0]], $sides[$vals[1]], $searched))["result"], $res["calcWay"]);
             } elseif (self::simpleArraySearch($availableOperations["cos"], $sides)) {
                 $vals = array_values($availableOperations["cos"]);
-                return new SmartResult($searched, [$vals[0] => $sides[$vals[0]], $vals[1] => $sides[$vals[1]]], "cos", TrigonometryHelper::cosAngle($sides[$vals[0]], $sides[$vals[1]]));
+                return new SmartResult($searched, [$vals[0] => $sides[$vals[0]], $vals[1] => $sides[$vals[1]]], "cos", ($res = ComplexTrigonometryHelper::cosAngle($sides[$vals[0]], $sides[$vals[1]], $searched))["result"], $res["calcWay"]);
             } elseif (self::simpleArraySearch($availableOperations["tan"], $sides)) {
                 $vals = array_values($availableOperations["tan"]);
-                return new SmartResult($searched, [$vals[0] => $sides[$vals[0]], $vals[1] => $sides[$vals[1]]], "tan", TrigonometryHelper::tanAngle($sides[$vals[0]], $sides[$vals[1]]));
+                return new SmartResult($searched, [$vals[0] => $sides[$vals[0]], $vals[1] => $sides[$vals[1]]], "tan", ($res = ComplexTrigonometryHelper::tanAngle($sides[$vals[0]], $sides[$vals[1]], $searched))["result"], $res["calcWay"]);
             }
         }
 
@@ -528,23 +541,23 @@ final class ComplexSmartCalculator
                     case "a":
                         if (isset($sides["a"])) return new SmartResult($searched, ["a" => $sides["a"]], "---", $sides["a"]);
                         if ($zeroSide === "b")
-                            return new SmartResult($searched, ["alpha" => $angles["alpha"], $zeroSide => $sides[$zeroSide]], "sin", TrigonometryHelper::sinSideOpp($angles["alpha"], $sides[$zeroSide]));
+                            return new SmartResult($searched, ["alpha" => $angles["alpha"], $zeroSide => $sides[$zeroSide]], "sin", ($res = ComplexTrigonometryHelper::sinSideOpp($angles["alpha"], $sides[$zeroSide], $searched))["result"], $res["calcWay"]);
                         if ($zeroSide === "c")
-                            return new SmartResult($searched, ["alpha" => $angles["alpha"], $zeroSide => $sides[$zeroSide]], "tan", TrigonometryHelper::tanSideOpp($angles["alpha"], $sides[$zeroSide]));
+                            return new SmartResult($searched, ["alpha" => $angles["alpha"], $zeroSide => $sides[$zeroSide]], "tan", ($res = ComplexTrigonometryHelper::tanSideOpp($angles["alpha"], $sides[$zeroSide], $searched))["result"], $res["calcWay"]);
                         break;
                     case "b":
                         if (isset($sides["b"])) return new SmartResult($searched, ["b" => $sides["b"]], "---", $sides["b"]);
                         if ($zeroSide === "a")
-                            return new SmartResult($searched, ["alpha" => $angles["alpha"], $zeroSide => $sides[$zeroSide]], "sin", TrigonometryHelper::sinSideHyp($angles["alpha"], $sides[$zeroSide]));
+                            return new SmartResult($searched, ["alpha" => $angles["alpha"], $zeroSide => $sides[$zeroSide]], "sin", ($res = ComplexTrigonometryHelper::sinSideHyp($angles["alpha"], $sides[$zeroSide], $searched))["result"], $res["calcWay"]);
                         if ($zeroSide === "c")
-                            return new SmartResult($searched, ["alpha" => $angles["alpha"], $zeroSide => $sides[$zeroSide]], "cos", TrigonometryHelper::cosSideHyp($angles["alpha"], $sides[$zeroSide]));
+                            return new SmartResult($searched, ["alpha" => $angles["alpha"], $zeroSide => $sides[$zeroSide]], "cos", ($res = ComplexTrigonometryHelper::cosSideHyp($angles["alpha"], $sides[$zeroSide], $searched))["result"], $res["calcWay"]);
                         break;
                     case "c":
                         if (isset($sides["c"])) return new SmartResult($searched, ["c" => $sides["c"]], "---", $sides["c"]);
                         if ($zeroSide === "a")
-                            return new SmartResult($searched, ["alpha" => $angles["alpha"], $zeroSide => $sides[$zeroSide]], "cos", TrigonometryHelper::cosSideAdj($angles["alpha"], $sides[$zeroSide]));
+                            return new SmartResult($searched, ["alpha" => $angles["alpha"], $zeroSide => $sides[$zeroSide]], "cos", ($res = ComplexTrigonometryHelper::cosSideAdj($angles["alpha"], $sides[$zeroSide], $searched))["result"], $res["calcWay"]);
                         if ($zeroSide === "b")
-                            return new SmartResult($searched, ["alpha" => $angles["alpha"], $zeroSide => $sides[$zeroSide]], "tan", TrigonometryHelper::tanSideAdj($angles["alpha"], $sides[$zeroSide]));
+                            return new SmartResult($searched, ["alpha" => $angles["alpha"], $zeroSide => $sides[$zeroSide]], "tan", ($res = ComplexTrigonometryHelper::tanSideAdj($angles["alpha"], $sides[$zeroSide], $searched))["result"], $res["calcWay"]);
                         break;
                 };
             }
@@ -553,23 +566,23 @@ final class ComplexSmartCalculator
                     case "a":
                         if (isset($sides["a"])) return new SmartResult($searched, ["a" => $sides["a"]], "---", $sides["a"]);
                         if ($zeroSide === "b")
-                            return new SmartResult($searched, ["gamma" => $angles["gamma"], $zeroSide => $sides[$zeroSide]], "cos", TrigonometryHelper::cosSideAdj($angles["gamma"], $sides[$zeroSide]));
+                            return new SmartResult($searched, ["gamma" => $angles["gamma"], $zeroSide => $sides[$zeroSide]], "cos", ($res = ComplexTrigonometryHelper::cosSideAdj($angles["gamma"], $sides[$zeroSide], $searched))["result"], $res["calcWay"]);
                         if ($zeroSide === "c")
-                            return new SmartResult($searched, ["gamma" => $angles["gamma"], $zeroSide => $sides[$zeroSide]], "tan", TrigonometryHelper::tanSideAdj($angles["gamma"], $sides[$zeroSide]));
+                            return new SmartResult($searched, ["gamma" => $angles["gamma"], $zeroSide => $sides[$zeroSide]], "tan", ($res = ComplexTrigonometryHelper::tanSideAdj($angles["gamma"], $sides[$zeroSide], $searched))["result"], $res["calcWay"]);
                         break;
                     case "b":
                         if (isset($sides["b"])) return new SmartResult($searched, ["b" => $sides["b"]], "---", $sides["b"]);
                         if ($zeroSide === "a")
-                            return new SmartResult($searched, ["gamma" => $angles["gamma"], $zeroSide => $sides[$zeroSide]], "cos", TrigonometryHelper::cosSideHyp($angles["gamma"], $sides[$zeroSide]));
+                            return new SmartResult($searched, ["gamma" => $angles["gamma"], $zeroSide => $sides[$zeroSide]], "cos", ($res = ComplexTrigonometryHelper::cosSideHyp($angles["gamma"], $sides[$zeroSide], $searched))["result"], $res["calcWay"]);
                         if ($zeroSide === "c")
-                            return new SmartResult($searched, ["gamma" => $angles["gamma"], $zeroSide => $sides[$zeroSide]], "sin", TrigonometryHelper::sinSideHyp($angles["gamma"], $sides[$zeroSide]));
+                            return new SmartResult($searched, ["gamma" => $angles["gamma"], $zeroSide => $sides[$zeroSide]], "sin", ($res = ComplexTrigonometryHelper::sinSideHyp($angles["gamma"], $sides[$zeroSide], $searched))["result"], $res["calcWay"]);
                         break;
                     case "c":
                         if (isset($sides["c"])) return new SmartResult($searched, ["c" => $sides["c"]], "---", $sides["c"]);
                         if ($zeroSide === "a")
-                            return new SmartResult($searched, ["gamma" => $angles["gamma"], $zeroSide => $sides[$zeroSide]], "tan", TrigonometryHelper::tanSideOpp($angles["gamma"], $sides[$zeroSide]));
+                            return new SmartResult($searched, ["gamma" => $angles["gamma"], $zeroSide => $sides[$zeroSide]], "tan", ($res = ComplexTrigonometryHelper::tanSideOpp($angles["gamma"], $sides[$zeroSide], $searched))["result"], $res["calcWay"]);
                         if ($zeroSide === "b")
-                            return new SmartResult($searched, ["gamma" => $angles["gamma"], $zeroSide => $sides[$zeroSide]], "sin", TrigonometryHelper::sinSideOpp($angles["gamma"], $sides[$zeroSide]));
+                            return new SmartResult($searched, ["gamma" => $angles["gamma"], $zeroSide => $sides[$zeroSide]], "sin", ($res = ComplexTrigonometryHelper::sinSideOpp($angles["gamma"], $sides[$zeroSide], $searched))["result"], $res["calcWay"]);
                         break;
                 };
             }
@@ -592,7 +605,7 @@ final class ComplexSmartCalculator
 
     private static function validateAngles(array $angles): bool
     {
-        return !empty($angle) && in_array(90, $angles);
+        return !empty($angles) && (in_array(90, $angles) || in_array("90", $angles));
     }
 
     private static function getNonRightAngleAngles(array $angles): array
@@ -613,5 +626,13 @@ final class ComplexSmartCalculator
             if ($value == 90) $res[$angle] = $value;
 
         return $res;
+    }
+
+    private static function sumAngles(array$angles): int
+    {
+        $sum = 0;
+        foreach ($angles as $angle)
+            $sum += $angle;
+        return $sum;
     }
 }

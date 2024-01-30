@@ -1,14 +1,33 @@
 <?php
 
-class complexResultArticle
+readonly class complexResultArticle
 {
-    public function __construct(private readonly string $searched, private readonly array $given, private readonly string $operationMethod, private readonly string|int|float $result = "", private readonly string|null $resultTypeName = null, private readonly int $elementCount = 0, private readonly string|null $unit = null) {}
+    public function __construct(private string $searched, private array $given, private string $operationMethod, private string|int|float $result = "", private string|null $resultTypeName = null, private int $elementCount = 0, private string|null $unit = null, private array|null $calcWay = null) {}
 
     public function __toString(): string
     {
         $givenStr = [];
         foreach ($this->given as $item => $value)
             $givenStr[] = '<p style="margin: 0;"><b>' . $item . ':</b> ' . $value . '</p>';
+
+        $calcWay = "";
+        $finalCalcWay = null;
+        if (is_array($this->calcWay)) {
+            foreach ($this->calcWay as $way)
+                $calcWay .= $way . "<br>";
+
+            $finalCalcWay = implode(PHP_EOL, [
+                "<script>",
+                "function calcWay() {",
+                "Swal.fire({",
+                "title: 'Rechenweg',",
+                "html: '" . $calcWay . "',",
+                "icon: 'question'",
+                "});",
+                "}",
+                "</script>",
+            ]);
+        }
 
         $extraLine = is_string($this->resultTypeName) ? '<h4 style="text-align: center;">' . $this->resultTypeName . '</h4>' : "";
         return implode(PHP_EOL, [
@@ -25,9 +44,11 @@ class complexResultArticle
             '<p style="margin: 0;"><b>Operation:</b> ' . $this->operationMethod . '</p>',
             '<p style="margin: 0;"><b>Gesucht:</b> ' . $this->searched . '</p>',
             implode(PHP_EOL, $givenStr),
+            $finalCalcWay !== null ? "<br><button onclick='calcWay()' class='outline contrast' style='cursor: help;'>Rechenweg</button>" : "",
             '</div>',
             '</article>',
-            '<script src="' . basicHeader::$dir . 'js/basicStuff.js"></script>'
+            '<script src="' . basicHeader::$dir . 'js/basicStuff.js"></script>',
+            $finalCalcWay,
         ]);
     }
 }
