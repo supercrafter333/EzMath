@@ -71,7 +71,7 @@ final class ComplexTrigonometryHelper
         $result = tan(deg2rad($sideAngle)) * $sideLengthAdj;
         return [
             "result" => $result,
-            "calcWay" => ["<b>tan</b>WINKEL × AK = GK ({$searched})", "tan{$sideAngle}° ÷ {$sideLengthAdj} = " . round($result, 2)]
+            "calcWay" => ["<b>tan</b>WINKEL × AK = GK ({$searched})", "tan{$sideAngle}° × {$sideLengthAdj} = " . round($result, 2)]
         ];
     }
 
