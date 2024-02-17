@@ -26,7 +26,7 @@ echo (new basicNav("ExpGrowthStart.php"));
 
 <main>
 
-    <form action="#" method="post" onsubmit="activateLoader()">
+    <form action="#" method="post" onsubmit="startLoader()">
 
         <?php
 
@@ -52,8 +52,7 @@ echo (new basicNav("ExpGrowthStart.php"));
                 '<option value="6">6 Nachkommastellen</option>',
                 '</select>',
                 '',
-                '<input type="submit" name="submit" value="Berechnen">',
-                '<progress id="loader" style="display: none;"></progress>'
+                '<button type="submit" id="submitForm">Berechnen</button>',
             ]);
         } else {
             include "../../calcOps/ExpGrowth/ExpGrowthK0.php";
@@ -89,8 +88,7 @@ echo (new basicNav("ExpGrowthStart.php"));
                 '<option value="6">6 Nachkommastellen</option>',
                 '</select>',
                 '',
-                '<input type="submit" name="submit" value="Berechnen">',
-                '<progress id="loader" style="display: none;"></progress>'
+                '<button type="submit" id="submitForm">Berechnen</button>',
             ]);
         }
         ?>

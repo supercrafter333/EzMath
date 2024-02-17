@@ -35,8 +35,8 @@ class basicHeader
     public function __toString(): string
     {
         $dir = self::$dir;
-        $themeStyle1 = $dir . "css/pico.fluid.classless.css";
-        $themeStyle2 = $dir . "css/pico.css";
+        $themeStyle1 = $dir . "css/pico.colors.css";
+        $themeStyle2 = $dir . "css/pico.lime.css";
         $basicStyle = $dir . "css/BasicStyle.css";
         $navigationStyle = $dir . "css/navbar.css";
         $animateCss = $dir . "css/animate.min.css";
@@ -52,7 +52,7 @@ class basicHeader
             '<meta name="keywords" content=' . (is_array($this->keywords) ? '"' . implode(", ", $this->keywords) . '"' : "") . '>',
             '<meta name="author" content="">',
             '<meta name="viewport" content="width=device-width, initial-scale=1">',
-//            '<link rel="stylesheet" href="' . $themeStyle1 . '">',
+            '<link rel="stylesheet" href="' . $themeStyle1 . '">',
             '<link rel="stylesheet" href="' . $themeStyle2 . '">',
             '<link rel="stylesheet" href="' . $basicStyle . '">',
             '<link rel="stylesheet" href="' . $navigationStyle . '">',

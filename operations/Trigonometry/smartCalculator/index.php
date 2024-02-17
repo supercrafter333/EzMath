@@ -44,7 +44,7 @@ $results = false;
 
 <br>
 
-<main style="margin-top: 0;">
+<main style="margin: auto;">
 
     <div class="headline">
         <h1>Trigonometrie</h1>
@@ -148,7 +148,7 @@ $results = false;
             "alpha", "beta", "gamma" => "Winkel"
         };
         $resArticle = new complexResultArticle($results->getSearchedValue(), $results->getGivenValues(), $results->getOperationMethod(), $results->getResult(), $matchSearchedType . " " . $results->getSearchedValue(), 0, $matchSearchedType === "Winkel" ? '°' : null, $results->getCalcWay());
-        echo $resArticle->__toString();
+        echo $resArticle->__toString() . "<br>";
     }
     ?>
     <form action="index.php" onsubmit="startLoader()" method="post">
@@ -221,16 +221,16 @@ $results = false;
             </select>
 
             <footer>
-                <input type="submit" value="Berechnen">
-                <progress id="submitFormProgressBar" style="display: none;"></progress>
+                <button type="submit" id="submitForm">Berechnen</button>
             </footer>
         </article>
     </form>
 
     <script>
         function startLoader() {
-            var loader = document.getElementById("submitFormProgressBar");
-            loader.style.display = "block";
+            var loader = document.getElementById("submitForm");
+            loader.setAttribute("aria-busy", "true");
+            loader.textContent = "";
         }
 
         function Hyp() {

@@ -35,7 +35,7 @@ nav ul li {
 .nav-content li a:hover {
     margin: 0 20px 0 20px;
     text-align: center;
-    background: var(--primary);
+    background: var(--pico-primary);
     color: white;
     width: 100%;
 }

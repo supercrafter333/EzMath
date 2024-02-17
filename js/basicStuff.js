@@ -20,6 +20,12 @@ function activateLoader() {
     loader.style.display = "block";
 }
 
+function startLoader() {
+    var loader = document.getElementById("submitForm");
+    loader.setAttribute("aria-busy", "true");
+    loader.textContent = "";
+}
+
 function copyResult(elementCount) {
     var result = document.getElementsByClassName('result')[elementCount];
 

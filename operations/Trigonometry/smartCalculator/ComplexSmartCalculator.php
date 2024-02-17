@@ -471,8 +471,8 @@ final class ComplexSmartCalculator
         $sideCount = count($sides);
 
         $sideTypes = [
-            "hyp" => "c",
-            "kat" => ["a", "b"]
+            "hyp" => "b",
+            "kat" => ["a", "c"]
         ];
 
         if ($searchedType === "side" && count($sides) == 2) {
