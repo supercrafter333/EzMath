@@ -272,3 +272,14 @@ article {
 a {
     text-decoration: none;
 }
+
+footer a img {
+    background: white;
+    transition: 250ms all ease;
+    border-radius: 0.5rem;
+    padding: 5px;
+}
+
+footer a img:hover {
+    background: rgba(255, 255, 255, 0.4);
+}

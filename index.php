@@ -7,7 +7,6 @@
  * bei Christoph Regensburger.
  * Dieses Projekt wird unter der Lizenz Apache License 2.0 veröffentlicht.
  */
-
 ?>
 
 <!DOCTYPE html>

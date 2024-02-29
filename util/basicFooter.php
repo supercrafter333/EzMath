@@ -13,4 +13,9 @@ echo '<footer class="container center-text">
     <small style="font-size: 2vh;">
         Copyright © 2024 - Christoph Regensburger
     </small>
+    <small>
+    <a href="https://github.com/supercrafter333/EzMath" target="_blank">
+        <img style="float: right;" height="42" width="42" src="https://unpkg.com/simple-icons@v11/icons/github.svg"/>
+    </a>
+</small>
 </footer>';
