@@ -32,6 +32,8 @@ echo (new basicNav());
 
 <main style="margin-top: 0;">
 
+    <?php include "../../util/wipLine.php"; ?>
+
     <div class="headline">
         <h1>Prozentrechnung</h1>
         <h3><mark>G ÷ 100% = W ÷ p</mark></h3>
@@ -41,20 +43,42 @@ echo (new basicNav());
     <article class="basicArticle">
         <h3>Prozentwert <mark>W</mark> berechnen</h3>
         <br />
+        <a role="button" href="PercentageValue.php">Zum Rechner</a>
+        <a role="button" href="#" onclick="W()" class="contrast outline formula-btn">Formel</a>
+    </article>
+
+    <article class="basicArticle">
+        <h3>Grundwert <mark>G</mark> berechnen</h3>
+        <br />
+        <a role="button" href="PercentageCoreValue.php">Zum Rechner</a>
+        <a role="button" href="#" onclick="G()" class="contrast outline formula-btn">Formel</a>
+    </article>
+
+    <article class="basicArticle">
+        <h3>Prozentsatz <mark>p</mark> berechnen</h3>
+        <br />
         <a role="button" href="#" disabled="true">Zum Rechner</a>
-        <a role="button" href="#" disabled="true" onclick="W()" class="contrast outline formula-btn">Formel</a>
+        <a role="button" href="#" disabled="true" onclick="p()" class="contrast outline formula-btn">Formel</a>
     </article>
 
     <script>
         function W() {
             Swal.fire({
-                title: "--- <mark>-<sub>-</sub></mark>",
-                html: '<hr />',
+                title: "Formel für <mark>K<sub>0</sub></mark>",
+                html: 'Die Formel für W ist:<br><mark>W = G × p ÷ 100%<sub>(Grundprozentsatz)</sub></mark><br><mark>G</mark> ist hier der Grundwert, also der Wert der von dem jede prozentuale Veränderung ausgeht.<br><mark>p</mark> ist der Prozentsatz, dieser ist immer in der Einheit % und gibt die prozentuale Veränderung für W von G an.' +
+                    '<br><mark>W</mark> ist der Wert der prozentualen Veränderung von G.',
                 icon: "question"
             });
         }
-
-        function K0() {
+        function G() {
+            Swal.fire({
+                title: "Formel für <mark>G</mark>",
+                html: 'Die Formel für G ist:<br><mark>G = 100% × W ÷ p</mark><br><mark>W</mark> ist hier der Prozentwert, also der Wert wie viel p% wert sind bzw. der Wert der prozentualen Veränderung von G.' +
+                    '<br><mark>p</mark> ist der Prozentsatz, dieser ist immer in der Einheit % und gibt die prozentuale Veränderung für W von G an.',
+                icon: "question"
+            });
+        }
+        function p() {
             Swal.fire({
                 title: "--- <mark>-<sub>-</sub></mark>",
                 html: '<hr />',

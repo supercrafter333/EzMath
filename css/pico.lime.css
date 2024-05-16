@@ -1090,7 +1090,7 @@ button:focus, button:is([aria-current]:not([aria-current=false])):focus,
 :where(button, [type=submit], [type=reset], [type=button], [role=button])[disabled],
 :where(fieldset[disabled]) :is(button, [type=submit], [type=button], [type=reset], [role=button]) {
   opacity: 0.5;
-  pointer-events: none;
+  pointer-events: stroke;
 }
 
 /**
