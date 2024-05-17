@@ -32,8 +32,6 @@ echo (new basicNav());
 
 <main style="margin-top: 0;">
 
-    <?php include "../../util/wipLine.php"; ?>
-
     <div class="headline">
         <h1>Prozentrechnung</h1>
         <h3><mark>G ÷ 100% = W ÷ p</mark></h3>
@@ -57,8 +55,8 @@ echo (new basicNav());
     <article class="basicArticle">
         <h3>Prozentsatz <mark>p</mark> berechnen</h3>
         <br />
-        <a role="button" href="#" disabled="true">Zum Rechner</a>
-        <a role="button" href="#" disabled="true" onclick="p()" class="contrast outline formula-btn">Formel</a>
+        <a role="button" href="PercentagePercentage.php">Zum Rechner</a>
+        <a role="button" href="#" onclick="p()" class="contrast outline formula-btn">Formel</a>
     </article>
 
     <script>
@@ -80,8 +78,9 @@ echo (new basicNav());
         }
         function p() {
             Swal.fire({
-                title: "--- <mark>-<sub>-</sub></mark>",
-                html: '<hr />',
+                title: "Formel für <mark>p</mark>",
+                html: 'Die Formel für p ist:<br><mark>p% = 100% × W ÷ G</mark><br><mark>W</mark> ist hier der Prozentwert, also der Wert wie viel p% wert sind bzw. der Wert der prozentualen Veränderung von G.' +
+                    '<br><mark>p</mark> ist der Prozentsatz, dieser ist immer in der Einheit % und gibt die prozentuale Veränderung für W von G an.',
                 icon: "question"
             });
         }

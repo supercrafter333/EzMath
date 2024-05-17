@@ -3,7 +3,7 @@
 <head>
     <?php
     include "../../util/basicHeader.php";
-    $header = new basicHeader(__DIR__, "Grundwert (G) berechnen", ["exponential", "growth", "exponent", "exponentiel", "wachstum", "exponentielles wachstum", "abnahme", "zinsrechnung", "k0", "kn", "p", "prozentsatz"]);
+    $header = new basicHeader(__DIR__, "Prozent (p) berechnen", ["exponential", "growth", "exponent", "exponentiel", "wachstum", "exponentielles wachstum", "abnahme", "zinsrechnung", "k0", "kn", "p", "prozentsatz"]);
 
     echo $header->__toString();
     $res = "";
@@ -14,14 +14,14 @@
 
 <?php
 include "../../util/basicNav.php";
-echo (new basicNav("PercentageCoreValue.php"));
+echo (new basicNav("PercentagePercentage.php"));
 ?>
 
 <br />
 
 <div class="skewedTop">
     <h1>Prozentrechnung</h1>
-    <h3>Grundwert (G)</h3>
+    <h3>Prozent (p)</h3>
 </div>
 
 <main>
@@ -30,13 +30,13 @@ echo (new basicNav("PercentageCoreValue.php"));
 
         <?php
 
-        if (!isset($_POST["W"]) || !isset($_POST["Prozent"]) || !isset($_POST["Gprozent"]) || !isset($_POST["Nachkommastellen"])) {
+        if (!isset($_POST["G"]) || !isset($_POST["W"]) || !isset($_POST["Gprozent"]) || !isset($_POST["Nachkommastellen"])) {
             echo implode(PHP_EOL, [
-                '<label for="W">Prozentwert (W):</label>',
-                '<input type="number" step="any" value="125" alt="W" name="W" required>',
+                '<label for="G">Grundwert (G):</label>',
+                '<input type="number" step="any" value="500" alt="G" name="G" required>',
                 '',
-                '<label for="Prozent">Prozentsatz (p):</label>',
-                '<input type="number" step="any" value="25" alt="Prozent" name="Prozent" required contenteditable="true">',
+                '<label for="W">Prozentwert (W):</label>',
+                '<input type="number" step="any" value="125" alt="W" name="W" required contenteditable="true">',
                 '',
                 '<label for="Gprozent">Grundprozentsatz (100%):</label>',
                 '<input type="number" step="any" value="100" alt="Gprozent" name="Gprozent" required>',
@@ -55,22 +55,22 @@ echo (new basicNav("PercentageCoreValue.php"));
                 '<button type="submit" id="submitForm">Berechnen</button>',
             ]);
         } else {
-            include "../../calcOps/Percentage/PercentageCoreValue.php";
+            include "../../calcOps/Percentage/PercentagePercentage.php";
+            $G = htmlspecialchars($_POST["G"]);
             $W = htmlspecialchars($_POST["W"]);
-            $p = htmlspecialchars($_POST["Prozent"]);
             $Gprozent = htmlspecialchars($_POST["Gprozent"] ?? 100);
             $dp = htmlspecialchars($_POST["Nachkommastellen"]);
 
-            $calc = new PercentageCoreValue($W, $p, $Gprozent);
+            $calc = new PercentagePercentage($G, $W, $Gprozent);
             $res = $calc->calc($dp);
 
 
             echo implode(PHP_EOL, [
-                '<label for="W">Prozentwert (W):</label>',
-                '<input type="number" step="any" value="' . $W . '" alt="W" name="W" required>',
+                '<label for="W">Grundwert (G):</label>',
+                '<input type="number" step="any" value="' . $G . '" alt="G" name="G" required>',
                 '',
-                '<label for="Prozent">Prozentsatz (p):</label>',
-                '<input type="number" step="any" value="' . $p . '" alt="Prozent" name="Prozent" required contenteditable="true">',
+                '<label for="Prozent">Prozentwert (W):</label>',
+                '<input type="number" step="any" value="' . $W . '" alt="W" name="W" required contenteditable="true">',
                 '',
                 '<label for="Gprozent">Grundprozentsatz (100%):</label>',
                 '<input type="number" step="any" value="' . $Gprozent . '" alt="Gprozent" name="Gprozent" required>',
@@ -98,7 +98,7 @@ echo (new basicNav("PercentageCoreValue.php"));
         <?php
         if ($res !== "") {
             include "../../util/resultArticle.php";
-            echo(new resultArticle($res, "Grundwert (G)"));
+            echo(new resultArticle($res, "Prozent (p)", 0, '%'));
         }
         ?>
     </div>
@@ -111,9 +111,9 @@ echo (new basicNav("PercentageCoreValue.php"));
 
         function formula() {
             Swal.fire({
-                title: "Formel für <mark>G</mark>",
-                html: 'Die Formel für G ist:<br><mark>G = 100% × W ÷ p</mark><br><mark>W</mark> ist hier der Prozentwert, also der Wert wie viel p% wert sind bzw. der Wert der prozentualen Veränderung von G.' +
-                    '<br><mark>G</mark> ist hier der Grundwert, also der Wert der von dem jede prozentuale Veränderung ausgeht.',
+                title: "Formel für <mark>p</mark>",
+                html: 'Die Formel für p ist:<br><mark>p% = 100% × W ÷ G</mark><br><mark>W</mark> ist hier der Prozentwert, also der Wert wie viel p% wert sind bzw. der Wert der prozentualen Veränderung von G.' +
+                    '<br><mark>p</mark> ist der Prozentsatz, dieser ist immer in der Einheit % und gibt die prozentuale Veränderung für W von G an.',
                 icon: "question"
             });
         }
